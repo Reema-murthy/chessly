@@ -1,0 +1,26 @@
+#main-board {
+    display: flex;
+    flex-direction: column;
+}
+
+.rows {
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+}
+
+
+.container {
+    margin-top: 200px;
+    max-width: 500px !important;
+    margin-left: 600px !important;
+}
+
+.bs {
+    background-color: dimgray;
+}
+
+.square {
+    text-align: center;
+    align-items: center;
+}
