@@ -8,8 +8,7 @@ function App() {
   const chess = new Chess();
   console.log(chess.ascii());
   return (
-    <div>
-      <br/>
+    <div className='main-container'>
       <Board />
     </div>
   );
