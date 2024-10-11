@@ -202,6 +202,11 @@ class Board extends React.Component {
 
     }
 
+    resetBoard(event){
+        window.alert("Game will be reset!");
+        window.location.reload(false);
+    }
+
     //registers the square chosen and makes a move once from and to of the state is set
     handleClick(event) {
         const newgame = new Chess();
@@ -222,6 +227,7 @@ class Board extends React.Component {
             <div className="container">
                 <div className="WhiteCorner"><h4>White Moves</h4><ul id="whiteMoves"></ul></div>
                 <div className="board">
+                <button name="Reset" id="resetButton" onClick={(event) => this.resetBoard(event)} > New game </button>
                     <button name="Undo" id="undoButton" onClick={(event) => this.undoMove(event)} > Undo </button>
                     <div id="main-board" className="container">
 
