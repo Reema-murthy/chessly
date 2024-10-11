@@ -102,7 +102,7 @@ class Board extends React.Component {
     }
 
     undoMove(event) {
-        if (this.prevMoveFrom == null) {
+        if (this.prevMoveFrom === null) {
             window.alert("No previous move to undo");
             return;
         }
@@ -152,7 +152,7 @@ class Board extends React.Component {
     makeMove() {
 
 
-        if (this.state.flag == 0) {
+        if (this.state.flag === 0) {
             console.log("error");
             return;
         }
@@ -209,8 +209,6 @@ class Board extends React.Component {
 
     //registers the square chosen and makes a move once from and to of the state is set
     handleClick(event) {
-        const newgame = new Chess();
-        let square = event.target.id;
         if (this.state.from === null) {
             this.setState({ from: event.target.id })
 

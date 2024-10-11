@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { Chess } from 'chess.js';
 import Board from './board.js'
