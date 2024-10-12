@@ -2,6 +2,35 @@ import React from "react";
 import './board.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Chess } from "chess.js";
+import blackPawn from './pieces/bpawn.png';
+import blackknight from './pieces/bknight.png';
+import blackRook from './pieces/br.png';
+import blackKing from './pieces/bking.png';
+import blackQueen from './pieces/bq.png';
+import blackBishop from './pieces/bb.png';
+import whitePawn from './pieces/wpawn.png';
+import whiteknight from './pieces/wknight.png';
+import whiteRook from './pieces/wrook.png';
+import whiteKing from './pieces/wking.png';
+import whiteQueen from './pieces/wq.png';
+import whiteBishop from './pieces/wbishop.png';
+
+const pieces = {
+    q: blackQueen,
+    k: blackKing,
+    r: blackRook,
+    b: blackBishop,
+    n: blackknight,
+    p: blackPawn,
+    Q: whiteQueen,
+    K: whiteKing,
+    R: whiteRook,
+    B: whiteBishop,
+    N: whiteknight,
+    P: whitePawn
+  };
+
+
 
 class Board extends React.Component {
     chess = new Chess();
@@ -110,10 +139,9 @@ class Board extends React.Component {
         this.currentPlayer = this.chess.turn(); //update current player
 
         //update moves table
+        var element = document.getElementById("blackMoves");
         if(this.currentPlayer === 'w')
-            var element = document.getElementById("whiteMoves");
-        else
-            var element = document.getElementById("blackMoves");
+            element = document.getElementById("whiteMoves");
         element.removeChild(element.lastChild);
 
         //newboard formation
@@ -166,7 +194,7 @@ class Board extends React.Component {
         else {
             try {
                 this.currentPlayer = this.chess.turn();
-                console.log(this.currentPlayer);
+                console.log(this.currentPlayer + " " + fromsquare + " " + tosquare);
                 this.chess.move({ from: fromsquare, to: tosquare });
                 this.updateMoveTable();
                 console.log("valid move");
@@ -197,8 +225,10 @@ class Board extends React.Component {
             }
         }
         console.log("move made " + this.state.from + " to" + this.state.to);
-        this.setState({ from: null, to: null, flag: 0 });
-        return;
+        this.setState({ from: null, to: null, flag: 0}, () => {
+            console.log("set to 0");
+            return;
+        });
 
     }
 
@@ -209,16 +239,24 @@ class Board extends React.Component {
 
     //registers the square chosen and makes a move once from and to of the state is set
     handleClick(event) {
+        var squareid;
+        if(event.target.tagName === "IMG"){
+            squareid = event.target.parentNode.id;
+        }
+        else{
+            squareid = event.target.id;
+        }
         if (this.state.from === null) {
-            this.setState({ from: event.target.id })
+            this.setState({ from: squareid })
 
         }
         else {
-            this.setState({ to: event.target.id, flag: 1 }, () => {
+            this.setState({ to: squareid, flag: 1 }, () => {
                 this.makeMove();
             });
         }
     }
+
 
     render() {
         return (
@@ -228,87 +266,18 @@ class Board extends React.Component {
                 <button name="Reset" id="resetButton" onClick={(event) => this.resetBoard(event)} > New game </button>
                     <button name="Undo" id="undoButton" onClick={(event) => this.undoMove(event)} > Undo </button>
                     <div id="main-board" className="container">
-
-                        <div className="rows">
-                            <div id="a8" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[0][0]}</div>
-                            <div id="b8" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[0][1]}</div>
-                            <div id="c8" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[0][2]}</div>
-                            <div id="d8" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[0][3]}</div>
-                            <div id="e8" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[0][4]}</div>
-                            <div id="f8" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[0][5]}</div>
-                            <div id="g8" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[0][6]}</div>
-                            <div id="h8" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[0][7]}</div>
-                        </div>
-                        <div className="rows">
-                            <div id="a7" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[1][0]}</div>
-                            <div id="b7" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[1][1]}</div>
-                            <div id="c7" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[1][2]}</div>
-                            <div id="d7" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[1][3]}</div>
-                            <div id="e7" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[1][4]}</div>
-                            <div id="f7" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[1][5]}</div>
-                            <div id="g7" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[1][6]}</div>
-                            <div id="h7" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[1][7]}</div>
-                        </div>
-                        <div className="rows">
-                            <div id="a6" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[2][0]}</div>
-                            <div id="b6" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[2][1]}</div>
-                            <div id="c6" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[2][2]}</div>
-                            <div id="d6" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[2][3]}</div>
-                            <div id="e6" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[2][4]}</div>
-                            <div id="f6" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[2][5]}</div>
-                            <div id="g6" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[2][6]}</div>
-                            <div id="h6" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[2][7]}</div>
-                        </div>
-                        <div className="rows">
-                            <div id="a5" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[3][0]}</div>
-                            <div id="b5" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[3][1]}</div>
-                            <div id="c5" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[3][2]}</div>
-                            <div id="d5" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[3][3]}</div>
-                            <div id="e5" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[3][4]}</div>
-                            <div id="f5" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[3][5]}</div>
-                            <div id="g5" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[3][6]}</div>
-                            <div id="h5" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[3][7]}</div>
-                        </div>
-                        <div className="rows">
-                            <div id="a4" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[4][0]}</div>
-                            <div id="b4" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[4][1]}</div>
-                            <div id="c4" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[4][2]}</div>
-                            <div id="d4" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[4][3]}</div>
-                            <div id="e4" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[4][4]}</div>
-                            <div id="f4" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[4][5]}</div>
-                            <div id="g4" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[4][6]}</div>
-                            <div id="h4" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[4][7]}</div>
-                        </div>
-                        <div className="rows">
-                            <div id="a3" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[5][0]}</div>
-                            <div id="b3" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[5][1]}</div>
-                            <div id="c3" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[5][2]}</div>
-                            <div id="d3" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[5][3]}</div>
-                            <div id="e3" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[5][4]}</div>
-                            <div id="f3" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[5][5]}</div>
-                            <div id="g3" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[5][6]}</div>
-                            <div id="h3" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[5][7]}</div>
-                        </div>
-                        <div className="rows">
-                            <div id="a2" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[6][0]}</div>
-                            <div id="b2" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[6][1]}</div>
-                            <div id="c2" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[6][2]}</div>
-                            <div id="d2" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[6][3]}</div>
-                            <div id="e2" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[6][4]}</div>
-                            <div id="f2" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[6][5]}</div>
-                            <div id="g2" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[6][6]}</div>
-                            <div id="h2" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[6][7]}</div>
-                        </div>
-                        <div className="rows">
-                            <div id="a1" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[7][0]}</div>
-                            <div id="b1" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[7][1]}</div>
-                            <div id="c1" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[7][2]}</div>
-                            <div id="d1" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[7][3]}</div>
-                            <div id="e1" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[7][4]}</div>
-                            <div id="f1" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[7][5]}</div>
-                            <div id="g1" className="square bs" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[7][6]}</div>
-                            <div id="h1" className="square" onClick={(event) => this.handleClick(event)}>{this.state.chessboard[7][7]}</div>
-                        </div>
+                        {this.state.chessboard.map((rows, rownum) => (
+                            <div className="rows" key={rownum}>
+                                {rows.map((playingpiece, colNum) => (
+                                    <div id={ String.fromCharCode(97 + colNum) + (8-rownum)} 
+                                    className={`${"square"} ${((rownum%2 == 0 && colNum%2 == 1) || (rownum%2 == 1 && colNum%2 == 0))? "bs" : "ws"}`}
+                                    key={colNum} 
+                                    onClick={(event) =>this.handleClick(event)}>
+                                        <img src={pieces[playingpiece]} ></img>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div className="BlackCorner"><h4>Black Moves</h4><ul id="blackMoves"></ul></div>

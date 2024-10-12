@@ -69,6 +69,10 @@
     background-color: rgb(103, 115, 152);
 }
 
+.ws {
+    background-color: #EDF4F2;
+}
+
 .square {
     text-align: center;
     align-items: center;
