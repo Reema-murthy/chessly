@@ -40,20 +40,22 @@ class Board extends React.Component {
     fromChar = null;
     toChar = null;
     currentPlayer = null;
+    fenStarting = this.chess.fen();
+    startingBoard = [
+        ["r", "n", "b", "q", "k", "b", "n", "r"],
+        ["p", "p", "p", "p", "p", "p", "p", "p"],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        ["P", "P", "P", "P", "P", "P", "P", "P"],
+        ["R", "N", "B", "Q", "K", "B", "N", "R"],
+    ]
 
     constructor() {
         super();
         this.state = {
-            chessboard: [
-                ["r", "n", "b", "q", "k", "b", "n", "r"],
-                ["p", "p", "p", "p", "p", "p", "p", "p"],
-                [" ", " ", " ", " ", " ", " ", " ", " "],
-                [" ", " ", " ", " ", " ", " ", " ", " "],
-                [" ", " ", " ", " ", " ", " ", " ", " "],
-                [" ", " ", " ", " ", " ", " ", " ", " "],
-                ["P", "P", "P", "P", "P", "P", "P", "P"],
-                ["R", "N", "B", "Q", "K", "B", "N", "R"],
-            ],
+            chessboard: this.startingBoard,
 
             from: null,
 
@@ -68,6 +70,7 @@ class Board extends React.Component {
         this.promotion = this.promotion.bind(this);
         this.undoMove = this.undoMove.bind(this);
         this.updateMoveTable = this.updateMoveTable.bind(this);
+        this.resetBoard = this.resetBoard.bind(this);
     }
 
     //updates the state of the chessboard
@@ -166,10 +169,11 @@ class Board extends React.Component {
 
     //add moves to both tables 
     updateMoveTable(){
+        var element;
         if(this.currentPlayer === 'w')
-            var element = document.getElementById("whiteMoves");
+            element = document.getElementById("whiteMoves");
         else
-            var element = document.getElementById("blackMoves");
+            element = document.getElementById("blackMoves");
         var newMove = document.createElement("li");
         newMove.textContent = "Move from " + this.state.from + " to " + this.state.to;
         element.appendChild(newMove);
@@ -181,7 +185,7 @@ class Board extends React.Component {
 
 
         if (this.state.flag === 0) {
-            console.log("error");
+            window.alert("Error");
             return;
         }
         let fromsquare = this.state.from;
@@ -218,7 +222,7 @@ class Board extends React.Component {
                         }
                     }
                     window.alert("New game starting soon...");
-                    window.location.reload(false);
+                    this.resetBoard();
                 }
             } catch (error) {
                 window.alert("Invalid Move!");
@@ -233,8 +237,19 @@ class Board extends React.Component {
     }
 
     resetBoard(event){
+        if(event != null)
         window.alert("Game will be reset!");
-        window.location.reload(false);
+        this.chess.load(this.fenStarting);
+        this.setState({chessboard: this.startingBoard, from: null, to: null, flag:0});
+        var table1 = document.getElementById("whiteMoves");
+        while(table1.lastChild){
+            table1.removeChild(table1.lastChild);
+        }
+        var table2 = document.getElementById("blackMoves");
+        while(table2.lastChild){
+            table2.removeChild(table2.lastChild);
+        }
+        console.log(this.chess.ascii());
     }
 
     //registers the square chosen and makes a move once from and to of the state is set
@@ -255,6 +270,7 @@ class Board extends React.Component {
                 this.makeMove();
             });
         }
+        console.log(this.chess.isGameOver());
     }
 
 
